@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            width: 1240px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px;
+        }
+        .login-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        .profile-info {
+            margin: 20px 0;
+        }
+        .profile-info p {
+            font-size: 18px;
+            color: #555;
+            margin: 10px 0;
+        }
+        .profile-info span {
+            font-weight: bold;
+            color: #333;
+        }
+        .events {
+            margin-top: 20px;
+        }
+        .events h2 {
+            font-size: 20px;
+            color: #444;
+        }
+        .events ul {
+            list-style: none;
+            padding: 0;
+        }
+        .events li {
+            background: #f7f7f7;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="user.jpeg" alt="User Icon">
+    </div>
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <p><span>Admission Number:</span> {{ student.admission_number }}</p>
+            <p><span>Department:</span> {{ student.department }}</p>
+        </div>
+        <div class="events">
+            <h2>Registered Events</h2>
+            <ul>
+                {% for event in student.events.all %}
+                    <li>{{ event.name }}</li>
+                {% empty %}
+                    <li>No events registered yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>  

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .not-available {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <div class="card">
+        <h2>Your Event Results</h2>
+
+        {% if accepted_events %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in accepted_events %}
+                <tr>
+                    <td>
+                        {% if entry.event %}
+                            {{ entry.event.name }}
+                        {% else %}
+                            <span class="not-available">Event Missing</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.result %}
+                            {{ entry.result }}
+                        {% else %}
+                            <span class="not-available">Not Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No accepted events available.</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

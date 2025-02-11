@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        select {
+            padding: 8px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: 100%;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Upload Student Results</h2>
+
+    <!-- Back Button -->
+    <a href="{% url 'admin_dashboard' %}" class="back-btn">← Back to Dashboard</a>
+
+    <!-- Event Filter Form -->
+    <form method="GET" action="{% url 'upload_results' %}">
+        <label for="event-filter">Filter by Event:</label>
+        <select id="event-filter" name="event" onchange="this.form.submit()">
+            <option value="">Select Event</option>
+            {% for event in events %}
+            <option value="{{ event.id }}" {% if event.id|stringformat:"s" == request.GET.event %}selected{% endif %}>
+                {{ event.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <!-- Results Upload Form -->
+    <form method="POST" action="{% url 'submit_results' %}">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Admission Number</th>
+                    <th>Department</th>
+                    <th>Event</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in student_events %}
+                <tr>
+                    <td>{{ entry.student.name }}</td>
+                    <td>{{ entry.student.admission_number }}</td>
+                    <td>{{ entry.student.department }}</td>
+                    <td>{{ entry.event.name }}</td>
+                    <td>
+                        <input type="text" name="result_{{ entry.student.id }}_{{ entry.event.id }}" 
+                               value="{{ entry.result|default:'' }}">
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: red;">No students found for the selected event</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn-submit">Upload Results</button>
+    </form>
+</div>
+
+</body>
+</html>

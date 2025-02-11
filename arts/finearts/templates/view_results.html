@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Event Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+        select {
+            padding: 10px;
+            font-size: 1em;
+        }
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            text-align: center;
+        }
+        .no-results {
+            text-align: center;
+            margin: 20px;
+            font-size: 1.2em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Results</h1>
+
+    <!-- Filter by Event -->
+    <form method="GET" action="">
+        <label for="event-filter">Select Event:</label>
+        <select id="event-filter" name="event" onchange="this.form.submit()">
+            <option value="">-- All Events --</option>
+            {% for event in events %}
+            <option value="{{ event.id }}" {% if event.id|stringformat:"s" == selected_event %}selected{% endif %}>
+                {{ event.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <!-- Results Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Participant</th>
+                <th>Department</th>
+                <th>Rank</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if results %}
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.event.name }}</td>
+                    <td>{{ result.participant_name }}</td>
+                    <td>{{ result.department }}</td>
+                    <td>{{ result.rank }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4" class="no-results">No results available for the selected event.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

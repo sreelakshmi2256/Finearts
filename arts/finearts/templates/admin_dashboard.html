@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f5f5f5;
+        }
+        header img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+        .filters {
+            margin-bottom: 20px;
+        }
+        .filters select {
+            margin-right: 10px;
+            padding: 5px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.png" alt="College Logo">
+    <div>
+        <h1>St. Thomas College (Autonomous), Thrissur</h1>
+        <p>Affiliated to the University of Calicut</p>
+    </div>
+</header>
+
+<div class="content">
+    <!-- Accepted Events Section -->
+    <div class="content">
+        <!-- Accepted Events Section -->
+        <div class="card">
+            <h2>Accepted Events</h2>
+    
+            <!-- Filters Section -->
+            <div class="filters">
+                <label for="department-filter">Department:</label>
+                <select id="department-filter" onchange="filterTable()">
+                    <option value="">All</option>
+                    {% for department in departments %}
+                    <option value="{{ department }}">{{ department }}</option>
+                    {% endfor %}
+                </select>
+    
+                <label for="event-filter">Event:</label>
+                <select id="event-filter" onchange="filterTable()">
+                    <option value="">All</option>
+                    {% for event in events %}
+                    <option value="{{ event }}">{{ event }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <div class="table-container">
+                <table id="accepted-events-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Admission Number</th>
+                            <th>Department</th>
+                            <th>Accepted Event</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in accepted_students %}
+                            {% for event in student.accepted_events %}
+                            <tr>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.admission_number }}</td>
+                                <td>{{ student.department }}</td>
+                                <td>{{ event }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <!-- New Button to Navigate to Result Upload Page -->
+        <div class="card">
+            <h2>Upload Results</h2>
+            <a href="{% url 'upload_results' %}" class="upload-btn">Go to Result Upload</a>
+        </div>
+    </div>
+    
+    <style>
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    
+</div>
+
+<script>
+    // Filter the table rows based on selected department and event
+    function filterTable() {
+        const departmentFilter = document.getElementById('department-filter').value.toLowerCase();
+        const eventFilter = document.getElementById('event-filter').value.toLowerCase();
+        const table = document.getElementById('accepted-events-table');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            const department = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+            const event = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
+
+            // Check if the row matches the selected filters
+            const matchesDepartment = department.includes(departmentFilter) || departmentFilter === '';
+            const matchesEvent = event.includes(eventFilter) || eventFilter === '';
+
+            // Show or hide the row based on the filter conditions
+            if (matchesDepartment && matchesEvent) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

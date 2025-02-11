@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher's View - Registered Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        .student {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7f7f7;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .student h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        .student p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .student ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+        }
+        .student li {
+            background: #ffffff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .accept-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .accept-button:hover {
+            background-color: #45a049;
+        }
+        .accepted {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Teacher's View - Registered Events</h1>
+        <div class="teacher-info">
+            <p><strong>Teacher's Department:</strong> {{ teacher_department }}</p>
+        </div>
+    
+        <!-- Displaying students -->
+        {% for student_data in students %}
+            <div class="student">
+                <h2>{{ student_data.student.name }}</h2>
+                <p><strong>Admission Number:</strong> {{ student_data.student.admission_number }}</p>
+                <p><strong>Department:</strong> {{ student_data.student.department }}</p>
+                <h3>Registered Events:</h3>
+                <ul>
+                    {% for event_data in student_data.events %}
+                    <li>
+                        <span>{{ event_data.event.name }}</span>
+                        {% if event_data.accepted %}
+                            <span class="accepted">Accepted</span>
+                        {% else %}
+                            <!-- Form to accept the event for this specific student -->
+                            <form method="POST" action="{% url 'accept_event' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="event_id" value="{{ event_data.event.id }}">
+                                <input type="hidden" name="student_id" value="{{ student_data.student.id }}">
+                                <button type="submit" class="accept-button">Accept</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>
