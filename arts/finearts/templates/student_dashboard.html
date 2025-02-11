@@ -39,44 +39,46 @@
 </head>
 <body>
 
-<div class="content">
-    <div class="card">
-        <h2>Your Event Results</h2>
-
-        {% if accepted_events %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Event</th>
-                    <th>Result</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for entry in accepted_events %}
-                <tr>
-                    <td>
-                        {% if entry.event %}
-                            {{ entry.event.name }}
-                        {% else %}
-                            <span class="not-available">Event Missing</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if entry.result %}
-                            {{ entry.result }}
-                        {% else %}
-                            <span class="not-available">Not Available</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-            <p>No accepted events available.</p>
-        {% endif %}
+    <div class="content">
+        <div class="card">
+            <h2>Your Event Results</h2>
+    
+            {% if accepted_events %}
+                <p>Events found! Listing them below:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in accepted_events %}
+                        <tr>
+                            <td>
+                                {% if entry.event %}
+                                    {{ entry.event.name }}
+                                {% else %}
+                                    <span class="not-available">Event Missing</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if entry.result %}
+                                    {{ entry.result }}
+                                {% else %}
+                                    <span class="not-available">Not Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="color: red;">No accepted events available. (Check database and view logic!)</p>
+            {% endif %}
+        </div>
     </div>
-</div>
+    
 
 </body>
 </html>

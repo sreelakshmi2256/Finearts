@@ -307,18 +307,20 @@ def submit_results(request):
 
 
 def student_dashboard(request): 
-    student = None  # Initialize student variable
-    accepted_events = [] 
+    student = None  
+    accepted_events = []  
+    
     if hasattr(request.user, 'student'):  # Ensure user is a student
         student = request.user.student
         accepted_events = StudentEvent.objects.filter(student=student, accepted=True).select_related('event')
-    else:
-        accepted_events = []  # Ensure it's an empty list if no student is found
+
+    print("Student:", student)  # Debugging print statement
+    print("Accepted Events:", accepted_events)  # Debugging print statement
 
     return render(request, 'student_dashboard.html', {
-        'student': student,
+        'student': student,  
         'accepted_events': accepted_events,  
-    
     })
+
 
 
